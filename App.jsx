@@ -162,7 +162,7 @@ function PlayersTab({ players, sessions, onAdd, onRemove, loading }) {
 // ── SESSION TAB ──────────────────────────────────────────────────────
 function SessionTab({ players, onSave }) {
   const [date, setDate] = useState('')
-  const [buyin, setBuyin] = useState('100')
+  const [buyin, setBuyin] = useState('50')
   const [selected, setSelected] = useState({})
   const [rebuys, setRebuys] = useState({})
   const [cashouts, setCashouts] = useState({})
@@ -241,8 +241,19 @@ function SessionTab({ players, onSave }) {
               <div style={{ display: 'flex', gap: 10, marginTop: 10, paddingLeft: 28 }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 11, color: 'var(--text3)', marginBottom: 4 }}>REBUYS</div>
-                  <input type="number" value={rebuys[p.id] || 0} min="0"
-                    onChange={e => setRebuys(r => ({ ...r, [p.id]: e.target.value }))} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <button
+                      onClick={() => setRebuys(r => ({ ...r, [p.id]: Math.max(0, (parseInt(r[p.id]) || 0) - 1) }))}
+                      style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--bg4)', border: '1px solid var(--border2)', color: 'var(--text)', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >−</button>
+                    <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, minWidth: 20, textAlign: 'center' }}>
+                      {rebuys[p.id] || 0}
+                    </span>
+                    <button
+                      onClick={() => setRebuys(r => ({ ...r, [p.id]: (parseInt(r[p.id]) || 0) + 1 }))}
+                      style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--bg4)', border: '1px solid var(--border2)', color: 'var(--text)', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >+</button>
+                  </div>
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 11, color: 'var(--text3)', marginBottom: 4 }}>CASH-OUT (₪)</div>
